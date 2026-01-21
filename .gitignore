@@ -1,0 +1,80 @@
+# -----------------------
+# Dependencies
+# -----------------------
+node_modules/
+.pnp/
+.pnp.js
+
+# -----------------------
+# Environment variables
+# -----------------------
+.env
+.env.*
+!.env.example
+
+# -----------------------
+# Logs
+# -----------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# -----------------------
+# Runtime data
+# -----------------------
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# -----------------------
+# Coverage & reports
+# -----------------------
+coverage/
+.nyc_output/
+
+# -----------------------
+# Build outputs
+# -----------------------
+dist/
+build/
+
+# -----------------------
+# Caches
+# -----------------------
+.cache/
+.eslintcache
+.vscode/*
+!.vscode/extensions.json
+
+# -----------------------
+# OS files
+# -----------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------
+# Editor / IDE
+# -----------------------
+.idea/
+*.swp
+*.swo
+
+# -----------------------
+# Testing
+# -----------------------
+jest-cache/
+test-results/
+
+# -----------------------
+# Docker
+# -----------------------
+docker-compose.override.yml
+
+# -----------------------
+# Optional: Turborepo / Monorepo
+# -----------------------
+.turbo/
