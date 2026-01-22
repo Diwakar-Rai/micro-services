@@ -7,7 +7,7 @@ app.post("/auth/validate", (req, res) => {
   if (token === "valid-token") {
     return res.json({
       valid: true,
-      userId: "user-123",
+      userId: "admin-123",
     });
   }
   return res.json({ valid: false });
