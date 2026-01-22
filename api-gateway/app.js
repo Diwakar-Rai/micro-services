@@ -5,6 +5,15 @@ const app = express();
 
 app.use(express.json());
 
+const authClient = axios.create({
+  baseURL: "http://localhost:4001",
+  timeout: 2000,
+});
+const notesClient = axios.create({
+  baseURL: "http://localhost:4002",
+  timeout: 2000,
+});
+
 /**
  * AUTH MIDDLEWARE
  * This runs BEFORE any route
@@ -17,7 +26,7 @@ app.use(async (req, res, next) => {
   }
 
   try {
-    const authRes = await axios.post("http://localhost:4001/auth/validate", {
+    const authRes = await authClient.post("/auth/validate", {
       token,
     });
     if (!authRes.data.valid) {
@@ -27,7 +36,9 @@ app.use(async (req, res, next) => {
     req.userId = authRes.data.userId;
     next();
   } catch (error) {
-    console.log(error);
+    if (error.code == "ECONNABORTED") {
+      return res.status(504).json({ error: "Auth service timeout" });
+    }
     return res.status(503).json({ error: "Auth Service Unavailable" });
   }
 
@@ -37,19 +48,18 @@ app.use(async (req, res, next) => {
 
   app.post("/notes", async (req, res) => {
     try {
-      const response = await axios.post(
-        "http://localhost:4002/notes",
-        req.body,
-        {
-          headers: {
-            "x-user-id": req.userId,
-          },
+      const response = await notesClient.post("/notes", req.body, {
+        headers: {
+          "x-user-id": req.userId,
         },
-      );
+      });
 
       res.json(response.data);
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
+      if (error.code == "ECONNABORTED") {
+        return res.status(504).json({ error: "Notes service timeout" });
+      }
       res.status(503).json({
         error: "Notes service unavailable",
       });
