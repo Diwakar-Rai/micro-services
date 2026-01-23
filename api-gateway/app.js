@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
 
@@ -51,16 +52,17 @@ app.use(async (req, res, next) => {
       const response = await notesClient.post("/notes", req.body, {
         headers: {
           "x-user-id": req.userId,
+          "x-internal-secret": process.env.SUPER_SECRET,
         },
       });
 
-      res.json(response.data);
+      return res.json(response.data);
     } catch (error) {
-      console.log(error);
       if (error.code == "ECONNABORTED") {
         return res.status(504).json({ error: "Notes service timeout" });
       }
-      res.status(503).json({
+      console.log(error.code);
+      return res.status(503).json({
         error: "Notes service unavailable",
       });
     }

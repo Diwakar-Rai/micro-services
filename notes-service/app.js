@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -5,6 +6,13 @@ app.use(express.json());
 // const NOTES = [];
 app.post("/notes", async (req, res) => {
   const userId = req.get("x-user-id");
+  const secret = req.get("x-internal-secret");
+
+  if (secret !== process.env.SUPER_SECRET) {
+    return res.status(403).json({
+      error: "Forbidden service",
+    });
+  }
   if (!userId) {
     return res.status(400).json({ error: "Missing user id" });
   }
