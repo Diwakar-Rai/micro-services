@@ -3,8 +3,18 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+app.use((req, res, next) => {
+  req.requestId = req.get("x-request-id");
+  next();
+});
+
+function log(req, message) {
+  console.log(`[notes-service]`, `[requestId=${req.requestId}]`, message);
+}
 // const NOTES = [];
 app.post("/notes", async (req, res) => {
+  log(req, "creating note");
+
   const userId = req.get("x-user-id");
   const secret = req.get("x-internal-secret");
 
