@@ -9,4 +9,8 @@ const createNote = async (data, headers) => {
   return response.data;
 };
 
-module.exports = { createNote };
+const getNotes = async headers => {
+  const response = await notesClient.get("/notes", { headers });
+  return response.data;
+};
+module.exports = { createNote, getNotes };
